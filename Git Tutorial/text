@@ -1,1 +1,5 @@
-int patience = 1;
+<<<<<<< HEAD
+float patience = 0;
+=======
+float patience = 0;
+>>>>>>> seperate
