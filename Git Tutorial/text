@@ -1,1 +1,1 @@
-float patience = 2;
+int patience = 1;
