@@ -14,41 +14,66 @@ var playState = {
 		floor.body.immovable = true;
 
 		
-		this.player = game.add.sprite(16, 16, 'player');
-		game.physics.enable(this.player, Phaser.Physics.ARCADE);
-		//game.physics.arcade.enable(player);
-		this.player.body.gravity.y = 300;
-		this.player.body.collideWorldBounds = true;
-		this.player.scale.setTo(1, -2);
+		this.player1 = game.add.sprite(16, 16, 'player1');
+		game.physics.enable(this.player1, Phaser.Physics.ARCADE);
+		//game.physics.arcade.enable(player1);
+		this.player1.body.gravity.y = 300;
+		this.player1.body.maxVelocity.x = 250;
+		this.player1.body.collideWorldBounds = true;
+		this.player1.scale.setTo(1, -2);
 		
+
 		this.win = game.add.sprite(256, 256, 'win');
 		game.physics.enable(this.win, Phaser.Physics.ARCADE);
-		//game.physics.arcade.collide(this.player, floor);
+		//game.physics.arcade.collide(this.player1, floor);
 		crash.stop();
 		
 	},
 	
 	update: function() {
 		crash.play();
-		var hitPlatform = game.physics.arcade.collide(this.player, ground);
-		game.physics.arcade.overlap(this.player, this.win, this.Win, null, this);
+		var hitPlatform = game.physics.arcade.collide(this.player1, ground);
+		game.physics.arcade.overlap(this.player1, this.win, this.Win, null, this);
 		
-		if(this.keyboard.isDown(Phaser.Keyboard.A)){
-			this.player.body.velocity.x = -175;
-		} else if(this.keyboard.isDown(Phaser.Keyboard.D)){
-			this.player.body.velocity.x = 175;
+		if(this.keyboard.isDown(Phaser.Keyboard.A) && !this.keyboard.isDown(Phaser.Keyboard.S)){
+			this.player1.body.acceleration.x = -300;
+			if(this.player1.body.velocity.x < 100 && this.player1.body.velocity.x > 0){
+				this.player1.body.velocity.x = 0;
+			}
+		} else if(this.keyboard.isDown(Phaser.Keyboard.D) && !this.keyboard.isDown(Phaser.Keyboard.S)){
+			this.player1.body.acceleration.x = 300;
+			if(this.player1.body.velocity.x < 0 && this.player1.body.velocity.x > -100){
+				this.player1.body.velocity.x = 0;
+			}
+		} else if(this.keyboard.isDown(Phaser.Keyboard.S)) {
+			if(this.player1.body.velocity.x > 0)
+				this.player1.body.acceleration.x = this.player1.body.acceleration.x - 25;
+			if(this.player1.body.velocity.x < 0)
+				this.player1.body.acceleration.x = this.player1.body.acceleration.x + 25;
+			if(this.player1.body.velocity.x < 25 && this.player1.body.velocity.x > -25){
+				this.player1.body.acceleration.x = 0;
+				this.player1.body.velocity.x = 0;
+			}
 		} else {
-			this.player.body.velocity.x = 0;
+			if(this.player1.body.velocity.x > 0)
+				this.player1.body.acceleration.x = this.player1.body.acceleration.x - 35;
+			if(this.player1.body.velocity.x < 0)
+				this.player1.body.acceleration.x = this.player1.body.acceleration.x + 35;
+			if(this.player1.body.velocity.x < 50 && this.player1.body.velocity.x > -50){
+				this.player1.body.acceleration.x = 0;
+				this.player1.body.velocity.x = 0;
+			}
 		}
 		
-		if(this.keyboard.isDown(Phaser.Keyboard.W) && this.player.body.touching.down){
-			this.player.body.velocity.y = -175;
-		} else if(this.keyboard.isDown(Phaser.Keyboard.S) && this.player.body.touching.down){
-			this.player.body.velocity.y = 175;
-			this.player.scale.setTo(1, -1);
+		if(this.keyboard.isDown(Phaser.Keyboard.W) && this.player1.body.touching.down){
+			this.player1.body.velocity.y = -175;
+			jump.play();
+		} else if(this.keyboard.isDown(Phaser.Keyboard.S) && this.player1.body.touching.down){
+			this.player1.body.velocity.y = 175;
+			this.player1.scale.setTo(1, -1);
 		} else {
-			this.player.scale.setTo(1, -2);
-			//this.player.body.velocity.y = 0;
+			this.player1.scale.setTo(1, -2);
+			//this.player1.body.velocity.y = 0;
 		}
 		crash.stop();
 	},
