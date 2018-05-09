@@ -19,6 +19,7 @@ var playState = {
 		//game.physics.arcade.enable(player);
 		this.player.body.gravity.y = 300;
 		this.player.body.collideWorldBounds = true;
+		this.player.scale.setTo(1, -2);
 		
 		this.win = game.add.sprite(256, 256, 'win');
 		game.physics.enable(this.win, Phaser.Physics.ARCADE);
@@ -29,7 +30,7 @@ var playState = {
 	
 	update: function() {
 		crash.play();
-		var hitPlatform = game.physics.arcade.collide(this.player, floor);
+		var hitPlatform = game.physics.arcade.collide(this.player, ground);
 		game.physics.arcade.overlap(this.player, this.win, this.Win, null, this);
 		
 		if(this.keyboard.isDown(Phaser.Keyboard.A)){
@@ -42,9 +43,11 @@ var playState = {
 		
 		if(this.keyboard.isDown(Phaser.Keyboard.W) && this.player.body.touching.down){
 			this.player.body.velocity.y = -175;
-		} else if(this.keyboard.isDown(Phaser.Keyboard.S)){
+		} else if(this.keyboard.isDown(Phaser.Keyboard.S) && this.player.body.touching.down){
 			this.player.body.velocity.y = 175;
+			this.player.scale.setTo(1, -1);
 		} else {
+			this.player.scale.setTo(1, -2);
 			//this.player.body.velocity.y = 0;
 		}
 		crash.stop();
