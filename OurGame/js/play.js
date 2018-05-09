@@ -4,6 +4,7 @@ var playState = {
 		crash = game.add.audio('crash');
 		crash.play();
 		this.keyboard = game.input.keyboard;
+		cursors = game.input.keyboard.createCursorKeys();
 		
 		ground = game.add.group();
 		ground.enableBody = true;
@@ -13,15 +14,21 @@ var playState = {
 		floor.scale.setTo(4, 2);
 		floor.body.immovable = true;
 
-		
+		//Player 1 Variables
 		this.player1 = game.add.sprite(16, 16, 'player1');
 		game.physics.enable(this.player1, Phaser.Physics.ARCADE);
-		//game.physics.arcade.enable(player1);
 		this.player1.body.gravity.y = 300;
 		this.player1.body.maxVelocity.x = 250;
 		this.player1.body.collideWorldBounds = true;
 		this.player1.scale.setTo(1, -2);
 		
+		//Player 2 Variables
+		this.player2 = game.add.sprite(game.width - 32, 16, 'player2');
+		game.physics.enable(this.player2, Phaser.Physics.ARCADE);
+		this.player2.body.gravity.y = 300;
+		this.player2.body.maxVelocity.x = 250;
+		this.player2.body.collideWorldBounds = true;
+		this.player2.scale.setTo(1, -2);
 
 		this.win = game.add.sprite(256, 256, 'win');
 		game.physics.enable(this.win, Phaser.Physics.ARCADE);
@@ -34,6 +41,8 @@ var playState = {
 		crash.play();
 		var hitPlatform = game.physics.arcade.collide(this.player1, ground);
 		game.physics.arcade.overlap(this.player1, this.win, this.Win, null, this);
+		var hitPlatform = game.physics.arcade.collide(this.player2, ground);
+		game.physics.arcade.overlap(this.player2, this.win, this.Win, null, this);
 		
 		if(this.keyboard.isDown(Phaser.Keyboard.A) && !this.keyboard.isDown(Phaser.Keyboard.S)){
 			this.player1.body.acceleration.x = -300;
@@ -75,6 +84,49 @@ var playState = {
 			this.player1.scale.setTo(1, -2);
 			//this.player1.body.velocity.y = 0;
 		}
+		
+		
+				if(cursors.left.isDown && !cursors.down.isDown){
+			this.player2.body.acceleration.x = -300;
+			if(this.player2.body.velocity.x < 100 && this.player2.body.velocity.x > 0){
+				this.player2.body.velocity.x = 0;
+			}
+		} else if(cursors.right.isDown && !cursors.down.isDown){
+			this.player2.body.acceleration.x = 300;
+			if(this.player2.body.velocity.x < 0 && this.player2.body.velocity.x > -100){
+				this.player2.body.velocity.x = 0;
+			}
+		} else if(cursors.down.isDown) {
+			if(this.player2.body.velocity.x > 0)
+				this.player2.body.acceleration.x = this.player2.body.acceleration.x - 25;
+			if(this.player2.body.velocity.x < 0)
+				this.player2.body.acceleration.x = this.player2.body.acceleration.x + 25;
+			if(this.player2.body.velocity.x < 25 && this.player2.body.velocity.x > -25){
+				this.player2.body.acceleration.x = 0;
+				this.player2.body.velocity.x = 0;
+			}
+		} else {
+			if(this.player2.body.velocity.x > 0)
+				this.player2.body.acceleration.x = this.player2.body.acceleration.x - 35;
+			if(this.player2.body.velocity.x < 0)
+				this.player2.body.acceleration.x = this.player2.body.acceleration.x + 35;
+			if(this.player2.body.velocity.x < 50 && this.player2.body.velocity.x > -50){
+				this.player2.body.acceleration.x = 0;
+				this.player2.body.velocity.x = 0;
+			}
+		}
+		
+		if(cursors.up.isDown && this.player2.body.touching.down){
+			this.player2.body.velocity.y = -175;
+			jump.play();
+		} else if(cursors.down.isDown && this.player2.body.touching.down){
+			this.player2.body.velocity.y = 175;
+			this.player2.scale.setTo(1, -1);
+		} else {
+			this.player2.scale.setTo(1, -2);
+			//this.player1.body.velocity.y = 0;
+		}
+		
 		crash.stop();
 	},
 	
