@@ -18,3 +18,24 @@ var winState = {
 		game.state.start('menu');
 	}
 };
+
+var winState2 = {
+	
+	create: function() {
+		var winLabel = game2.add.text(80, 80, 'YEET!',
+									{ font: '50px Arial', fill: '#00FF00' });
+									
+		var startLabel = game2.add.text(80, game2.world.height-80, 
+									'press "W" to restart',
+									{font: '25px Arial', fill: '#ffffff' });
+									
+		var wkey = game2.input.keyboard.addKey(Phaser.Keyboard.W);
+		
+		wkey.onDown.addOnce(this.restart, this);
+		
+	},
+	
+	restart: function() {
+		game2.state.start('menu2');
+	}
+};
