@@ -1,7 +1,9 @@
-var winState = {
+var gameOverState = {
 	
 	create: function() {
-		var winLabel = game.add.text(80, 80, 'YOU WON!',
+		crash = game.add.audio('crash');
+		crash.play();
+		var winLabel = game.add.text(80, 80, 'GAME OVER!',
 									{ font: '50px Arial', fill: '#00FF00' });
 									
 		var startLabel = game.add.text(80, game.world.height-80, 
@@ -15,14 +17,15 @@ var winState = {
 	},
 	
 	restart: function() {
+		crash.stop();
 		game.state.start('menu');
 	}
 };
 
-var winState2 = {
+var gameOverState2 = {
 	
 	create: function() {
-		var winLabel = game2.add.text(80, 80, 'YOU WON!',
+		var winLabel = game2.add.text(80, 80, 'GAME OVER!',
 									{ font: '50px Arial', fill: '#00FF00' });
 									
 		var startLabel = game2.add.text(80, game2.world.height-80, 

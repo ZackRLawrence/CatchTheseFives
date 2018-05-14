@@ -10,12 +10,13 @@ game.state.add('menu', menuState);
 game.state.add('load', loadState);
 game.state.add('play', playState);
 game.state.add('win', winState);
+game.state.add('gameOver', gameOverState);
 game2.state.add('boot2', bootState2);
 game2.state.add('menu2', menuState2);
 game2.state.add('load2', loadState2);
 game2.state.add('play2', playState2);
 game2.state.add('win2', winState2);
-
+game2.state.add('gameOver2', gameOverState2);
 
 
 game.state.start('boot');
