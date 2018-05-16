@@ -17,6 +17,7 @@ var loadState = {
 		game.load.audio('crash', 'assets/audio/CRASH.wav'); //in case game crashes. Found at https://www.youtube.com/watch?v=LGIHef7UD7w
 		game.load.audio('Office', 'assets/audio/Office.mp3'); //main theme. Found at https://www.youtube.com/watch?v=jjFVkbOPM8Y
 		game.load.audio('Explosion', 'assets/audio/Explosion.mp3'); //sound that plays if collision occurs. Found at https://www.youtube.com/watch?v=UdNBLnuRICQ
+		game.load.audio('High_Five', 'assets/audio/High_Five.mp3');
 		
 	},
 	

@@ -4,6 +4,7 @@ var playState = {
 		crash = game.add.audio('crash');
 		theme = game.add.audio('Office');
 		explosion = game.add.audio('Explosion');
+		high_five = game.add.audio('High_Five');
 		crash.play();
 		theme.play();
 		game.world.setBounds(0, 0, 3000, 480);
@@ -115,8 +116,18 @@ var playState = {
 			if(this.player1.body.velocity.x < 0)
 				this.player1.body.acceleration.x = this.player1.body.acceleration.x + 25;
 			if(this.player1.body.velocity.x < 25 && this.player1.body.velocity.x > -25){
+				if(this.keyboard.isDown(Phaser.Keyboard.D)){
+					this.player1.body.acceleration.x = 25;
+					this.player1.body.velocity.x = 25;
+				}
+				else if(this.keyboard.isDown(Phaser.Keyboard.A)){
+					this.player1.body.acceleration.x = -25;
+					this.player1.body.velocity.x = -25;
+				}
+				else {
 				this.player1.body.acceleration.x = 0;
 				this.player1.body.velocity.x = 0;
+				}
 			}
 		} else {
 			if(this.player1.body.velocity.x > 0)
@@ -157,8 +168,18 @@ var playState = {
 			if(this.player2.body.velocity.x < 0)
 				this.player2.body.acceleration.x = this.player2.body.acceleration.x + 25;
 			if(this.player2.body.velocity.x < 25 && this.player2.body.velocity.x > -25){
+				if(cursors.left.isDown){
+					this.player2.body.acceleration.x = -25;
+					this.player2.body.velocity.x = -25;
+				}
+				else if(cursors.right.isDown){
+					this.player2.body.acceleration.x = 25;
+					this.player2.body.velocity.x = 25;
+				}
+				else {
 				this.player2.body.acceleration.x = 0;
 				this.player2.body.velocity.x = 0;
+				}
 			}
 		} else {
 			if(this.player2.body.velocity.x > 0)
@@ -185,6 +206,7 @@ var playState = {
 		
 		//High Five Movement
 		if(this.player1.body.position.x == this.player2.body.position.x-16 && !this.player1.body.touching.down && !this.player2.body.touching.down){
+			high_five.play();
 			explosion.play();
 			this.player1_proj.body.position.x = this.player1.body.position.x;
 			this.player1_proj.body.position.y = this.player1.body.position.y;
@@ -353,8 +375,18 @@ var playState2 = {
 			if(this.player1.body.velocity.x < 0)
 				this.player1.body.acceleration.x = this.player1.body.acceleration.x + 25;
 			if(this.player1.body.velocity.x < 25 && this.player1.body.velocity.x > -25){
+				if(this.keyboard.isDown(Phaser.Keyboard.D)){
+					this.player1.body.acceleration.x = 25;
+					this.player1.body.velocity.x = 25;
+				}
+				else if(this.keyboard.isDown(Phaser.Keyboard.A)){
+					this.player1.body.acceleration.x = -25;
+					this.player1.body.velocity.x = -25;
+				}
+				else {
 				this.player1.body.acceleration.x = 0;
 				this.player1.body.velocity.x = 0;
+				}
 			}
 		} else {
 			if(this.player1.body.velocity.x > 0)
@@ -395,8 +427,18 @@ var playState2 = {
 			if(this.player2.body.velocity.x < 0)
 				this.player2.body.acceleration.x = this.player2.body.acceleration.x + 25;
 			if(this.player2.body.velocity.x < 25 && this.player2.body.velocity.x > -25){
-				this.player2.body.acceleration.x = 0;
-				this.player2.body.velocity.x = 0;
+				if(cursors.left.isDown){
+					this.player2.body.acceleration.x = -25;
+					this.player2.body.velocity.x = -25;
+				}
+				else if(cursors.right.isDown){
+					this.player2.body.acceleration.x = 25;
+					this.player2.body.velocity.x = 25;
+				}
+				else {
+					this.player2.body.acceleration.x = 0;
+					this.player2.body.velocity.x = 0;
+				}
 			}
 		} else {
 			if(this.player2.body.velocity.x > 0)
