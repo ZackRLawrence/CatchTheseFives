@@ -77,7 +77,11 @@ var playState = {
 		game.physics.enable(this.enemy, Phaser.Physics.ARCADE);
 		//game.physics.arcade.collide(this.player1, floor);
 		
-		game.camera.follow(this.player1_proj);
+		//game.camera.follow(this.player1_proj);
+		
+		scoreText = game.add.text(16, 16, 'Distance: 0 meters', { fontSize: '32px', fill: '#ffffff' });
+		scoreText2 = game.add.text(16, 64, 'Distance: 0 meters', { fontSize: '32px', fill: '#ffffff' });
+		var cameraStayX = 0;
 		
 		crash.stop();
 		
@@ -85,6 +89,12 @@ var playState = {
 	
 	update: function() {
 		crash.play();
+
+
+		scoreText.text = 'Player 1 '+ this.player1.body.x;
+		scoreText2.text = 'Player 2 '+ this.player2.body.x;
+		
+		
 		game.physics.arcade.collide(this.player1, ground);
 		//game.physics.arcade.overlap(this.player1, this.win, this.Win, null, this);
 		game.physics.arcade.collide(this.player2, ground);
@@ -241,11 +251,27 @@ var playState = {
 			this.player2_proj.body.position.y = 700;
 		}
 		
+		scoreText.x = game.camera.x + 16;
+		scoreText2.x = game.camera.x + 16;
+		/*
 		if(this.player1_proj.body.position.x > 10)
 			game.camera.follow(this.player1_proj);
-		else
+		else if(this.player2.body.x - this.player1.body.x > 600)
 			game.camera.follow(this.player1);
-		
+		else {
+			//cameraStayX = game.camera.X;
+			game.camera.follow(null);
+			//game.camera.x = cameraStayX;
+		}
+		*/
+		if((this.player2.body.x - this.player1.body.x) <= 600 + Math.abs(300 - Math.abs(this.player2.body.x - game2.camera.x)))
+			game.camera.follow(null);
+		else if((this.player2_proj.body.x - this.player1_proj.body.x) <= 600 + Math.abs(300 - Math.abs(this.player2_proj.body.x - game2.camera.x)))
+			game.camera.follow(null);
+		else if(this.player1_proj.body.position.x > 10)
+			game.camera.follow(this.player1_proj);
+		else 
+			game.camera.follow(this.player1);
 		crash.stop();
 	},
 	/*
@@ -337,8 +363,9 @@ var playState2 = {
 		this.enemy.create(2800, 400, 'enemy');
 		
 		game2.camera.follow(this.player2);
+		this.counter = 0;
+		counterText = game2.add.text(16, 16, 'Distance: 0 meters', { fontSize: '32px', fill: '#ffffff' });
 		crash.stop();
-		
 	},
 	
 	update: function() {
@@ -496,12 +523,31 @@ var playState2 = {
 			this.player2_proj.body.position.x = 3000;
 			this.player2_proj.body.position.y = 700;
 		}
-		
+		/*
 		if(this.player2_proj.body.position.x < 2800)
 			game2.camera.follow(this.player2_proj);
 		else
 			game2.camera.follow(this.player2);
+		*/
+		this.counter+=1
+		counterText.text = 'Counter: '+ this.counter;
+		counterText.x = game2.camera.x + 16
 		
+		if((this.player2.body.x - this.player1.body.x) <= 600 + Math.abs(300 - Math.abs(this.player1.body.x - game.camera.x)))
+			game2.camera.follow(null);
+		else if((this.player2_proj.body.x - this.player1_proj.body.x) <= 600 + Math.abs(300 - Math.abs(this.player1_proj.body.x - game.camera.x)))
+			game2.camera.follow(null);
+		else if(this.player2_proj.body.position.x < 2800)
+			game2.camera.follow(this.player2_proj);
+		else
+			game2.camera.follow(this.player2);
+		/*
+		} else if(this.counter > 5) {
+			//cameraStayX = game.camera.X;
+			game2.camera.follow(null);
+			//game.camera.x = cameraStayX;
+		}
+		*/
 		
 		crash.stop();
 	},
