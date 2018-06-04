@@ -5,6 +5,8 @@ var game = new Phaser.Game(600,480, Phaser.AUTO, 'gameDiv');
 //game.world.setBounds(0, 0, 3000, 480);
 var game2 = new Phaser.Game(600,480, Phaser.AUTO, 'gameDiv2');
 //game2.world.setBounds(0, 0, 3000, 480);
+
+
 game.state.add('boot', bootState);
 game.state.add('menu', menuState);
 game.state.add('load', loadState);
@@ -21,7 +23,6 @@ game2.state.add('gameOver2', gameOverState2);
 
 game.state.start('boot');
 game2.state.start('boot2');
-
 
 window.addEventListener("keydown", function(e) {
     // space and arrow keys

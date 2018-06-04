@@ -52,7 +52,6 @@ p.one {
 
 #page-wrap {
     position: relative;
-
     width: 1200px; 
     margin: 50px auto;
     margin-top: 0px;
@@ -68,7 +67,7 @@ p.one {
     position: relative;
     margin-top: 25px;
     width: 1200px;
-    height: 450px;
+    height: 500px;
 }
 
 #overview {
@@ -100,7 +99,7 @@ p.one {
 #gameDiv2 {
     position: absolute;
     top: 0;
-    left: 601px;
+    left: 600px;
     z-index: 0;
 }
 

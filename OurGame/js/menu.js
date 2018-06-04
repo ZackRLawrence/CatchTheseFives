@@ -1,6 +1,8 @@
 var menuState = {
 	
 	create: function() {
+		menuMusic = game.add.audio('Menu');
+		menuMusic.play();
 		var nameLabel = game.add.text(80, 80, 'Player1',
 									{ font: '50px Arial', fill: '#ffffff' });
 									
@@ -26,6 +28,7 @@ var menuState = {
 	},
 	
 	start: function() {
+		menuMusic.stop();
 		game.state.start('play');
 	}
 };
