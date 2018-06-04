@@ -2,7 +2,7 @@ var playState = {
 
 	create: function() {
 		crash = game.add.audio('crash');
-		theme = game.add.audio('Office');
+		theme = game.add.audio('Buddy');
 		explosion = game.add.audio('Explosion');
 		high_five = game.add.audio('High_Five');
 		crash.play();
