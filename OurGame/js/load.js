@@ -11,6 +11,7 @@ var loadState = {
 		game.load.image('player1_proj', 'assets/img/player1_proj.png');
 		game.load.image('player2_proj', 'assets/img/player2_proj.png');
 		game.load.image('enemy', 'assets/img/enemy.png');
+		game.load.image('box', 'assets/img/cardboard box.png');
 		game.load.image('win', 'assets/img/win.png');
 		game.load.image('floor', 'assets/img/floor.png');
 		game.load.audio('jump', 'assets/audio/Jump.wav'); // sound effect made by me
