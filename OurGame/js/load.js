@@ -18,7 +18,7 @@ var loadState = {
 		game.load.audio('jump', 'assets/audio/Jump.wav'); // sound effect made by Zack
 		game.load.audio('crash', 'assets/audio/Ragamama.mp3'); //Music: http://www.purple-planet.com
 		game.load.audio('Menu', 'assets/audio/Playdate.wav'); //Menu theme. Music: http://www.purple-planet.com
-		game.load.audio('Buddy', 'assets/audio/bensound-buddy.mp3') // Main theme. Music: www.bensound.com
+		game.load.audio('Buddy', 'assets/audio/Cubicle.mp3') // Main theme
 		game.load.audio('Explosion', 'assets/audio/Explosion.mp3'); //sound that plays if collision occurs. Found at https://www.youtube.com/watch?v=UdNBLnuRICQ
 		game.load.audio('High_Five', 'assets/audio/High_Five.mp3');
 		
