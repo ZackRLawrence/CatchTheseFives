@@ -1,7 +1,8 @@
 body {
     font-family: Helvetica;
-    margin-top: 0px;
-    margin-bottom: 0px;
+    /*margin-top: 0px;
+    margin-bottom: 0px;*/
+    margin: 0px;
 }
 
 canvas {
@@ -11,7 +12,7 @@ canvas {
 
 h1 {
     display: block;
-    margin: auto;
+    margin: 10px;
 }
 
 h3 {
@@ -22,12 +23,32 @@ h1, h2, h3 {
     color: navy;
 }
 
+h1.one{
+    margin-top: 0px;
+    margin-bottom: 0px;
+    color: white;
+}
+
 p {
     text-indent: 40px;
 }
 
 p.one {
     border-top: 4px solid lightgrey;
+}
+
+header{
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 1200px;
+    margin: auto;
+    background-color: navy;
+    clear: left;
+    text-align: center;
+    /*box-shadow: 0 0 20px black;*/
+
+    font-family: Bookman Old Style;
+    font-size: 40px;
 }
 
 #bg {
@@ -58,22 +79,23 @@ p.one {
     margin-bottom: 0px;
     padding: 20px;
     background: white;
-    -moz-box-shadow: 0 0 20px black;
+    /*-moz-box-shadow: 0 0 20px black;
     -webkit-box-shadow: 0 0 20px black;
-    box-shadow: 0 0 20px black;
+    box-shadow: 0 0 20px black;*/
 }
 
 #text-container {
     position: relative;
     margin-top: 25px;
     width: 1200px;
-    height: 500px;
+    height: 750px;
 }
 
 #overview {
     position: absolute;
     padding-left: 5px;
     width: 645px;
+    height: 500px;
 }
 
 #about {
@@ -81,6 +103,14 @@ p.one {
     padding-left: 5px;
     width: 495px;
     left: 700px;
+}
+
+#attributions {
+    position: absolute;
+    padding-left: 5px;
+    width: 645px;
+    top: 500px;
+
 }
 
 #game-container {
@@ -102,4 +132,3 @@ p.one {
     left: 600px;
     z-index: 0;
 }
-
