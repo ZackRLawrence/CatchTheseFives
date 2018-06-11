@@ -5,7 +5,6 @@ var loadState = {
 		var loadingLabel = this.add.text(80,150, 'Loading, \n please wait...',
 									{font: '50px Courier', fill: '#ffffff'});
 		
-		
 		this.load.image('player1', 'assets/img/player1.png');
 		this.load.image('player2', 'assets/img/player2.png');
 		this.load.image('player1_proj', 'assets/img/player1_proj.png');
