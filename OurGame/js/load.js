@@ -7,8 +7,8 @@ var loadState = {
 		
 		this.load.image('player1', 'assets/img/player1.png');
 		this.load.image('player2', 'assets/img/player2.png');
-		this.load.image('player1_proj', 'assets/img/player1_proj.png');
-		this.load.image('player2_proj', 'assets/img/player2_proj.png');
+		this.load.image('player1_proj', 'assets/img/projectile.png');
+		this.load.image('player2_proj', 'assets/img/projectile2.png');
 		this.load.image('logo', 'assets/img/logo.png');
 		this.load.image('enemy', 'assets/img/enemy.png');
 		this.load.image('printer', 'assets/img/printer.png');
@@ -49,8 +49,8 @@ var loadState2 = {
 		
 		this.load.image('player1', 'assets/img/player1.png');
 		this.load.image('player2', 'assets/img/player2.png');
-		this.load.image('player1_proj', 'assets/img/player1_proj.png');
-		this.load.image('player2_proj', 'assets/img/player2_proj.png');
+		this.load.image('player1_proj', 'assets/img/projectile.png');
+		this.load.image('player2_proj', 'assets/img/projectile.png');
 		this.load.image('logo', 'assets/img/logo.png');
 		this.load.image('enemy', 'assets/img/enemy.png');
 		this.load.image('printer', 'assets/img/printer.png');

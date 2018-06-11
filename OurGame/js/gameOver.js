@@ -10,6 +10,10 @@ var gameOverState = {
 									'press "W" to restart',
 									{font: '25px Courier', fill: '#ffffff' });
 									
+		var startLabe2 = game.add.text(440, game.world.height-160, 
+									'High Fives: ',
+									{font: '25px Courier', fill: '#ffffff' });
+									
 		var wkey = game.input.keyboard.addKey(Phaser.Keyboard.W);
 		
 		wkey.onDown.addOnce(this.restart, this);
@@ -31,6 +35,10 @@ var gameOverState2 = {
 		var startLabel = game2.add.text(-160, game2.world.height-80, 
 									'press "W" to restart',
 									{font: '25px Courier', fill: '#ffffff' });
+									
+		var startLabe2 = game2.add.text(50, game2.world.height-160, 
+									score,
+									{font: '25px Courier', fill: '#ffffff' });									
 									
 		var wkey = game2.input.keyboard.addKey(Phaser.Keyboard.W);
 		

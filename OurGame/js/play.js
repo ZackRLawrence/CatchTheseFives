@@ -4,6 +4,8 @@ var enemy_loc = [];
 var seconds;
 var countdownTracker = 9;
 var enemySpacing = 250;
+var score = 0;
+var seconds_max = 15;
 
 var playState = { 
 
@@ -28,7 +30,7 @@ var playState = {
 		this.world.setBounds(0, 0, 10500, 480);
 		this.keyboard = this.input.keyboard;
 		cursors = this.input.keyboard.createCursorKeys();
-		seconds = 60;
+		seconds = 15;
 		
 		/*--------------------MOVEMENT VARS--------------------*/
 		this.facingRight = -30;
@@ -57,13 +59,13 @@ var playState = {
 		
 		
 		//Create Walls
-		wall = this.add.group();
-		wall.enableBody = true;
+		this.wall = this.add.group();
+		this.wall.enableBody = true;
 		var wall_dist = 0;
 		for(var i = 0; i < 10; i++){
-			var player1_Wall1 = wall.create(wall_dist, 0, 'floor');
-			player1_Wall1.scale.setTo(0.25, 15);
-			player1_Wall1.body.immovable = true;
+			var Player1_Wall = this.wall.create(wall_dist, 0, 'wall');
+			Player1_Wall.scale.setTo(1, 15);
+			Player1_Wall.body.immovable = true;
 			wall_dist += 500;
 		}
 		
@@ -159,12 +161,6 @@ var playState = {
 			enemy_pos += enemySpacing;
 		}
 		
-		//Annoying Coworker
-		this.coworker = game.add.group();
-		game.physics.enable(this.coworker, Phaser.Physics.ARCADE);
-		this.coworker.enableBody = true;
-		this.coworker_exists = 0;
-		
 		var countdownTracker = 9;
 		/*-------------------------------------------------------------------------*/
 
@@ -213,11 +209,11 @@ var playState = {
 		//this.player2_sprite.y = this.player2_hitbox.y - 110;
 				
 		this.physics.arcade.collide(this.player1_hitbox, ground);
-		this.physics.arcade.collide(this.player1_hitbox, wall);
-		this.physics.arcade.collide(this.player1_proj, wall, this.destroyPlayer1_Wall1, null, this);
+		this.physics.arcade.collide(this.player1_hitbox, this.wall);
+		this.physics.arcade.collide(this.player1_proj, this.wall, this.destroyPlayer1_Wall, null, this);
 		//this.physics.arcade.collide(this.player1_proj, this.player_Wall1);
-		this.physics.arcade.collide(this.player2_hitbox, wall);
-		this.physics.arcade.collide(this.player2_proj, wall, this.destroyPlayer_2Wall1, null, this);
+		this.physics.arcade.collide(this.player2_hitbox, this.wall);
+		this.physics.arcade.collide(this.player2_proj, this.wall, this.destroyPlayer_2Wall1, null, this);
 		//this.physics.arcade.collide(this.player2_proj, wall1, this.destroyWall1, null, this);
 		//this.physics.arcade.overlap(this.player1_hitbox, this.win, this.Win, null, this);
 		this.physics.arcade.collide(this.player2_hitbox, ground);
@@ -225,7 +221,6 @@ var playState = {
 		this.physics.arcade.overlap(this.player1_hitbox, this.enemy, this.enemyCollision, null, this);
 		this.physics.arcade.overlap(this.player2_hitbox, this.enemy, this.enemyCollision1, null, this);
 		this.physics.arcade.collide(this.enemy, ground, this.enemyBounce, null, this);
-		this.physics.arcade.overlap(this.player1, this.coworker, this.coworkerCollision, null, this);
 		
 		
 		/*--------------------P1 MOVEMENT--------------------*/
@@ -453,29 +448,72 @@ var playState = {
 			this.player1_hitbox.body.position.y = this.player1_proj.body.position.y;
 			this.player1_proj.body.position.x = 0;
 			this.player1_proj.body.position.y = 700;
-			this.size_num -= 500;
-			this.size_num2 += 500;
+			
 			this.player2_hitbox.body.position.x = this.player2_proj.body.position.x;
 			this.player2_hitbox.body.position.y = this.player2_proj.body.position.y;
 			this.player2_proj.body.position.x = 10000;
 			this.player2_proj.body.position.y = 700;
-			seconds = 60;
 			
-			this.enemy.kill();
-			this.enemy = this.add.group();
-			this.enemy.enableBody = true;
-			var enemy_pos = 150;
-			for (var i = 0; i < 50; i++){
-			height_decider = Math.random();
+			countdownTracker = 9;
+			score++
+			if(score > 9){
+			seconds = seconds_max;
+			}
+			else{
+				this.size_num -= 500;
+				this.size_num2 += 500;
+				seconds_max = seconds_max + 5;
+				seconds = seconds_max;
+			}
+			
+			this.enemy.kill();	
+
+		this.enemy = this.add.group();
+		this.enemy.enableBody = true;
+		this.physics.enable(this.enemy, Phaser.Physics.ARCADE);			
+		var enemy_pos = 150;
+		for (var i = 0; i < 50; i++){
+			enemy_loc[i] = Math.random();
 			height_enem = 0;
-			if(height_decider > 0.5)
+			if(enemy_loc[i] <= 0.4){
 				height_enem = 400;
-			else
-				height_enem = 340;
-			enemy_loc[i] = height_enem;
-			this.obstacle = this.enemy.create(enemy_pos, enemy_loc[i], 'enemy');
-			enemy_pos += 200;
+				this.obstacle = this.enemy.create(enemy_pos, height_enem, 'box');
+				this.obstacle.scale.setTo(0.35, 0.35);
+				this.obstacle.anchor.x = .5;
+				this.obstacle.anchor.y = .5;
+			}
+			else if(enemy_loc[i] > 0.4 && enemy_loc[i] <= 0.6){
+				height_enem = 400;
+				this.obstacle = this.enemy.create(enemy_pos, height_enem, 'printer');
+				this.obstacle.scale.setTo(.6, .6);
+				this.obstacle.anchor.x = .4;
+				this.obstacle.anchor.y = .9;
+				this.obstacle.body.gravity.y = 200;
+				this.obstacle.body.maxVelocity.y = 300;
+			}
+			else if(enemy_loc[i] > 0.6 && enemy_loc[i] <= 0.9){
+				height_enem = 345;
+				this.obstacle = this.enemy.create(enemy_pos, height_enem, 'table');
+				this.obstacle.scale.setTo(.35, .35);
+				this.obstacle.anchor.x = .3;
+				this.obstacle.anchor.y = .3;
+				this.obstacle.body.setSize(100, 100, 70, 50);
+			}
+			else{
+				height_enem = 372;
+				this.pos = enemy_pos - 30;
+				this.obstacle = this.enemy.create(enemy_pos, height_enem, 'coworker');
+				this.obstacle.scale.setTo(0.6, 0.6);
+				this.obstacle.anchor.x = .5;
+				this.obstacle.anchor.y = .5;
+				this.obstacle.body.maxVelocity.x = 800;
+				this.obstacle_sprite = this.add.sprite(this.obstacle.x-80, this.obstacle.y-70, 'water_cooler');
+				this.obstacle_sprite.alpha = 0.5;
+				this.obstacle_sprite.scale.setTo(0.7, 0.7);
+			}
+			enemy_pos += enemySpacing;
 		}
+			
 		
 			timer.resume();
 		}
@@ -506,19 +544,7 @@ var playState = {
 			this.screenDivider.x = this.camera.x + this.camera.width - 1;
 		else if(game2.camera.x - game.camera.x <= this.camera.width)
 			this.screenDivider.x = this.camera.x + this.camera.width;
-//		else
-//			game.camera.follow(this.player1_hitbox);
-		/*
-		else if((Math.round(this.player2_hitbox.body.x,0) - Math.round(this.player1_hitbox.body.x,0)) <= this.camera.width - 4 + Math.abs(300 - Math.abs(Math.round(this.player2_hitbox.body.x,0) - game2.camera.x)))
-			game.camera.follow(null);
-		else if((this.player2_proj.body.x - this.player1_proj.body.x) <= this.camera.width - 4 + Math.abs(300 - Math.abs(this.player2_proj.body.x - game2.camera.x)))
-			game.camera.follow(null);
-		else if(this.player1_proj.body.position.x > 10)
-			game.camera.follow(this.player1_proj);
-		else 
-			game.camera.follow(this.player1_hitbox);
-		//game.camera.follow(this.player1_hitbox);
-		*/
+
 		//distance text
 		dist = Math.round(Math.abs(this.player2_hitbox.body.position.x - this.player1_hitbox.body.position.x));
 		distText.text = dist;	
@@ -534,59 +560,34 @@ var playState = {
 			game.state.start('gameOver');
 			game2.state.start('gameOver2');
 		}
-		
-		
-		/*-----------------COUNTDOWN------------------*/
-		
-		
-		//countdown clock
-		if(seconds == countdownTracker){
-			countdownText = this.add.text(225, 50, seconds, { fontSize: '360px', fill: '#00FF00' });
-			clock.play();
-			countdownText.alpha = 0.5;
-			countdownText.fixedToCamera = true;
-			let tween = this.game.add.tween(countdownText).to({alpha: 0}, 1000, Phaser.Easing.Linear.None, true, 15);
-			countdownTracker--;
-		}
-	
-		//time text
-		timeText.text = seconds;
-		
-		
-		/*-----------------COWORKER BEHAVIOR------------------*/		
-
-		if(create_enem2 == 1){
-			create_timer = this.time.create(false);
-			create_timer.loop(dist/100, this.create_worker, this);
-			create_timer.start();
-			create_enem2 = 0;
-		}
-		
 		//theme.resume();
 		crash.stop();
 	},
 	
-	destroyPlayer1_Wall1: function(player1_proj, player1_Wall1){
-				player1_Wall1.kill();
+	destroyPlayer1_Wall: function(player1_proj, player1_Wall){
+				this.broken_wall = this.add.sprite(player1_Wall.x, player1_Wall.y, 'wallBroken');
+				player1_Wall.kill();
 	},
-	destroyPlayer2_Wall1: function(player1_proj, player1_Wall1){
-				player2_Wall2.kill();
+	destroyPlayer2_Wall: function(player1_proj, player2_Wall){
+				this.broken_wall = this.add.sprite(player2_Wall.x, player2_Wall.y, 'wallBroken');
+				player2_Wall.kill();
 	},
 	
 	updateTime: function(){
 		seconds--;
+		if(seconds < 10){
+			countdownText = this.add.text(225, 50, seconds, { fontSize: '360px', fill: '#00FF00' });
+			countdownText.alpha = 0.5;
+			countdownText.fixedToCamera = true;
+			let tween = this.add.tween(countdownText).to({alpha: 0}, 1000, Phaser.Easing.Linear.None, true, 15);
+		}
 	},
 	
 	/*-------------------COLLISIONS---------------------*/
 	enemyCollision: function(player1, obstacle){
 		if(obstacle.body.maxVelocity.x == 800){
-			if(player1.inCamera == true){
-				var coworker_proj = this.
-				coworker.create(obstacle.x, obstacle.y, 'enemy');
-				coworker_proj.body.velocity.x = 800;
-				coworker_proj_angularVelocity = 180;
-				obstacle.kill();
-				create_enem1 = 1;
+			if(this.keyboard.isDown(Phaser.Keyboard.S) && player1.body.touching.down){
+				countdownTracker = countdownTracker;
 			}
 			else
 				obstacle.kill();
@@ -605,12 +606,8 @@ var playState = {
 	
 	enemyCollision2: function(player2, obstacle){
 		if(obstacle.body.maxVelocity.x == 800){
-			if(player2.inCamera == true){
-				var coworker_proj = this.
-				coworker.create(obstacle.x, obstacle.y, 'enemy');
-				coworker_proj.body.velocity.x = -800;
-				coworker_proj_angularVelocity = 180;
-				obstacle.kill();
+			if(cursors.down.isDown && player2.body.touching.down){
+				countdownTracker = countdownTracker;
 			}
 			else
 				obstacle.kill();
@@ -630,24 +627,6 @@ var playState = {
 	enemyBounce: function(obstacle){
 		obstacle.body.bounce.y = 20;
 	},	
-	
-	coworkerCollision: function(player1, coworker){
-		if(coworker.body.velocity.x == -800){
-			seconds = seconds - 10;
-				if(seconds < 9)
-					countdownTracker = seconds;
-			coworker.kill();
-		}
-	},
-	
-	create_worker: function(){
-		create_timer.destroy();
-		var coworker_proj = this.coworker.create(this.player1_hitbox.x+500, 350, 'enemy');
-		coworker_proj.scale.setTo(1,1);
-		coworker_proj.body.velocity.x = -800;
-		coworker_proj_angularVelocity = 180;
-		create_enem2 = 0;
-	},
 	
 	gameOver: function() {
 		theme.stop();
@@ -710,19 +689,19 @@ var playState2 = {
 		
 		
 		//create walls
-		wall = this.add.group();
-		wall.enableBody = true;
+		this.wall = this.add.group();
+		this.wall.enableBody = true;
 		var wall_dist = 10500;
 		for(var i = 0; i < 10; i++){
-			var player1_Wall1 = wall.create(wall_dist, 0, 'floor');
-			player1_Wall1.scale.setTo(0.25, 15);
-			player1_Wall1.body.immovable = true;
+			var Player1_Wall = this.wall.create(wall_dist, 0, 'wall');
+			Player1_Wall.scale.setTo(1, 15);
+			Player1_Wall.body.immovable = true;
 			wall_dist -= 500;
 		}
 		
-		player2_Wall1 = wall.create(0, 0, 'floor');
-		player2_Wall1.scale.setTo(0.25, 15);
-		player2_Wall1.body.immovable = true;
+		Player2_Wall = this.wall.create(0, 0, 'floor');
+		Player2_Wall.scale.setTo(0.25, 15);
+		Player2_Wall.body.immovable = true;
 
 		//Player 1 Variables
 		this.player1_hitbox = this.add.sprite(5000, 400, 'player1');
@@ -802,22 +781,17 @@ var playState2 = {
 				height_enem = 372;
 				this.pos = enemy_pos - 30;
 				this.obstacle = this.enemy.create(enemy_pos, height_enem, 'coworker');
-				this.obstacle.scale.setTo(0.6, 0.6);
+				this.obstacle.scale.setTo(-0.6, 0.6);
 				this.obstacle.anchor.x = .5;
 				this.obstacle.anchor.y = .5;
 				this.obstacle.body.maxVelocity.x = 800;
-				this.obstacle_sprite = this.add.sprite(this.obstacle.x-80, this.obstacle.y-70, 'water_cooler');
+				//this.obstacle.body.setSize(100, 100, 70, 50);
+				this.obstacle_sprite = this.add.sprite(this.obstacle.x+80, this.obstacle.y-70, 'water_cooler');
 				this.obstacle_sprite.alpha = 0.5;
 				this.obstacle_sprite.scale.setTo(0.7, 0.7);
 			}
 			enemy_pos += enemySpacing;
 		}
-		
-		//Annoying Coworker
-		this.coworker = game.add.group();
-		game.physics.enable(this.coworker, Phaser.Physics.ARCADE);
-		this.coworker.enableBody = true;
-		this.coworker_exists = 0;
 
 		countdownTracker = 9;
 		/*---------------------------------------------------*/
@@ -839,6 +813,11 @@ var playState2 = {
 		//score vars
 		scoreNum2 = 0;
 		
+		//timer for countdown
+		timer2 = this.time.create(false);
+		timer2.loop(1000, this.updateTime, this);
+		timer2.start();
+		
 		this.camera.x = 5200;
 		
 		this.camera.follow(this.player2_hitbox);
@@ -857,16 +836,15 @@ var playState2 = {
 		this.physics.arcade.collide(this.player1_hitbox, ground);
 		//this.physics.arcade.overlap(this.player1_hitbox, this.win, this.Win, null, this);
 		this.physics.arcade.collide(this.player2_hitbox, ground);
-		this.physics.arcade.collide(this.player1_hitbox, wall);
-		this.physics.arcade.collide(this.player1_proj, wall, this.destroyPlayer1_Wall1, null, this);
-		this.physics.arcade.collide(this.player2_hitbox, wall);
-		this.physics.arcade.collide(this.player2_proj, wall, this.destroyPlayer2_Wall1, null, this);
+		this.physics.arcade.collide(this.player1_hitbox, this.wall);
+		this.physics.arcade.collide(this.player1_proj, this.wall, this.destroyPlayer1_Wall, null, this);
+		this.physics.arcade.collide(this.player2_hitbox, this.wall);
+		this.physics.arcade.collide(this.player2_proj, this.wall, this.destroyPlayer2_Wall, null, this);
 		//this.physics.arcade.overlap(this.player2_hitbox, this.win, this.Win, null, this);
 		var Five = this.physics.arcade.collide(this.player1_hitbox, this.player2_hitbox);
 		this.physics.arcade.overlap(this.player1_hitbox, this.enemy, this.enemyCollision, null, this);
 		this.physics.arcade.overlap(this.player2_hitbox, this.enemy, this.enemyCollision2, null, this);
 		this.physics.arcade.collide(this.enemy, ground, this.enemyBounce, null, this);
-		this.physics.arcade.overlap(this.player1, this.coworker, this.coworkerCollision, null, this);
 
 
 		
@@ -1056,7 +1034,7 @@ var playState2 = {
 		//--------------------------------------------------------------
 				//High Five Movement
 		if(this.player1_hitbox.body.position.x >= this.player2_hitbox.body.position.x-100 && !this.player1_hitbox.body.touching.down && !this.player2_hitbox.body.touching.down){
-			timer2.pause();
+			//timer2.pause();
 			scoreNum2 =1;
 			this.player1_proj.body.position.x = this.player1_hitbox.body.position.x;
 			this.player1_proj.body.position.y = this.player1_hitbox.body.position.y;
@@ -1092,24 +1070,74 @@ var playState2 = {
 			this.player1_hitbox.body.position.y = this.player1_proj.body.position.y;
 			this.player1_proj.body.position.x = 0;
 			this.player1_proj.body.position.y = 700;
-			this.size_num -= 500;
-			this.size_num2 += 500;
+			//this.size_num -= 500;
+			//this.size_num2 += 500;
 			this.player2_hitbox.body.position.x = this.player2_proj.body.position.x;
 			this.player2_hitbox.body.position.y = this.player2_proj.body.position.y;
 			this.player2_proj.body.position.x = 10000;
 			this.player2_proj.body.position.y = 700;
-			seconds = 60;
-		
-			this.enemy.kill();		
-			this.enemy = this.wadd.group();
-			this.enemy.enableBody = true;	
-			var enemy_pos = 150;
-			for (var i = 0; i < 50; i++){
-			var obstacle = this.enemy.create(enemy_pos, enemy_loc[i], 'enemy');
-			enemy_pos += 200;
+			//seconds = 60;
+			countdownTracker = 9;
+			
+			if(score > 9){
+			seconds = seconds_max;
+			}
+			else{
+				this.size_num -= 500;
+				this.size_num2 += 500;
+				//seconds_max = seconds_max + 5;
+				//seconds = seconds_max;
 			}
 			
-			timer2.resume();
+		
+		this.enemy.kill();	
+
+		this.enemy = this.add.group();
+		this.enemy.enableBody = true;
+		this.physics.enable(this.enemy, Phaser.Physics.ARCADE);		
+			
+			
+			var enemy_pos = 150;
+		for (var i = 0; i < 50; i++){
+			height_enem = 0;
+			if(enemy_loc[i] <= 0.4){
+				height_enem = 400;
+				this.obstacle = this.enemy.create(enemy_pos, height_enem, 'box');
+				this.obstacle.scale.setTo(0.35, 0.35);
+				this.obstacle.anchor.x = .5;
+				this.obstacle.anchor.y = .5;
+			}
+			else if(enemy_loc[i] > 0.4 && enemy_loc[i] <= 0.6){
+				height_enem = 400;
+				this.obstacle = this.enemy.create(enemy_pos, height_enem, 'printer');
+				this.obstacle.scale.setTo(.6, .6);
+				this.obstacle.anchor.x = .4;
+				this.obstacle.anchor.y = .9;
+				this.obstacle.body.gravity.y = 200;
+				this.obstacle.body.maxVelocity.y = 300;
+			}
+			else if(enemy_loc[i] > 0.6 && enemy_loc[i] <= 0.9){
+				height_enem = 345;
+				this.obstacle = this.enemy.create(enemy_pos, height_enem, 'table');
+				this.obstacle.scale.setTo(.35, .35);
+				this.obstacle.anchor.x = .3;
+				this.obstacle.anchor.y = .3;
+				this.obstacle.body.setSize(100, 100, 70, 50);
+			}
+			else{
+				height_enem = 372;
+				this.pos = enemy_pos - 30;
+				this.obstacle = this.enemy.create(enemy_pos, height_enem, 'coworker');
+				this.obstacle.scale.setTo(0.6, 0.6);
+				this.obstacle.anchor.x = .5;
+				this.obstacle.anchor.y = .5;
+				this.obstacle.body.maxVelocity.x = 800;
+				this.obstacle_sprite = this.add.sprite(this.obstacle.x-80, this.obstacle.y-70, 'water_cooler');
+				this.obstacle_sprite.alpha = 0.5;
+				this.obstacle_sprite.scale.setTo(0.7, 0.7);
+			}
+			enemy_pos += enemySpacing;
+		}
 		}
 		
 		//for testing horizontal location
@@ -1142,53 +1170,15 @@ var playState2 = {
 			this.screenDivider.x = this.camera.x - 9;
 		else if(game2.camera.x - game.camera.x <= this.camera.width)
 			this.screenDivider.x = this.camera.x - 10;
-//		else
-//			game2.camera.follow(this.player2_hitbox);
 
-		/*
-		if((Math.round(this.player2_hitbox.body.x,0) - Math.round(this.player1_hitbox.body.x,0)) <= this.camera.width - 4 + Math.abs(300 - Math.abs(Math.round(this.player1_hitbox.body.x,0) - game.camera.x)))
-			game2.camera.follow(null);
-		else if((this.player2_proj.body.x - this.player1_proj.body.x) <= this.camera.width - 4 + Math.abs(300 - Math.abs(this.player1_proj.body.x - game.camera.x)))
-			game2.camera.follow(null);
-		else if(this.player2_proj.body.position.x < 10000)
-			game2.camera.follow(this.player2_proj);
-		else
-			game2.camera.follow(this.player2_hitbox);
-		*/
-		//game2.camera.follow(this.player2_hitbox);
 		
 		//dist text
 		dist = Math.round(Math.abs(this.player2_hitbox.body.position.x - this.player1_hitbox.body.position.x));
 		distText2.text = dist;	
 		distText2.cameraOffset.y = this.player1_hitbox.body.position.y;
 		
-		
-		
-		/*-----------------COUNTDOWN------------------*/
-		
-		
-		//countdown clock
-		if(seconds == countdownTracker){
-			countdownText2 = this.add.text(225, 50, seconds, { fontSize: '360px', fill: '#00FF00' });
-			countdownText2.alpha = 0.5;
-			countdownText2.fixedToCamera = true;
-			let tween = this.add.tween(countdownText2).to({alpha: 0}, 1000, Phaser.Easing.Linear.None, true, 15);
-			//countdownTracker--;
-		}
-		
 		//time text
 		timeText2.text = seconds ;
-		
-		
-			
-		/*-----------------COWORKER BEHAVIOR------------------*/
-		
-		if (create_enem1 == 1){
-			create_timer = this.time.create(false);
-			create_timer.loop(dist/100, this.create_worker, this);
-			create_timer.start();
-			create_enem1 = 0;
-		}
 
 		
 		
@@ -1196,26 +1186,32 @@ var playState2 = {
 	},
 	
 	updateTime: function(){
+		if(seconds < 10){
+			countdownText2 = this.add.text(225, 50, seconds, { fontSize: '360px', fill: '#00FF00' });
+			countdownText2.alpha = 0.5;
+			countdownText2.fixedToCamera = true;
+			let tween = this.add.tween(countdownText2).to({alpha: 0}, 1000, Phaser.Easing.Linear.None, true, 15);
+			//countdownTracker2--;
+		}
 	},
 	
-	destroyPlayer1_Wall1: function(player1_proj, player1_Wall1){
-				player1_Wall1.kill();
+	destroyPlayer1_Wall: function(player1_proj, player1_Wall){
+			this.broken_wall = this.add.sprite(player1_Wall.x, player1_Wall.y, 'wallBroken');
+				player1_Wall.kill();
 	},
-	destroyPlayer2_Wall1: function(player2_proj, player2_Wall1){
-				player2_Wall1.kill();
+	destroyPlayer2_Wall: function(player2_proj, player2_Wall){
+			this.broken_wall = this.add.sprite(player2_Wall.x, player2_Wall.y, 'wallBroken');
+				player2_Wall.kill();
 	},
 	
 	enemyCollision: function(player1, obstacle){
 		if(obstacle.body.maxVelocity.x == 800){
-			if(player1.inCamera == true){
-				var coworker_proj = this.coworker.create(obstacle.x, obstacle.y, 'enemy');
-				coworker_proj.body.velocity.x = 800;
-				coworker_proj_angularVelocity = 180;
-				obstacle.kill();
-			}
+				if(this.keyboard.isDown(Phaser.Keyboard.S) && player1.body.touching.down){
+					countdownTracker = countdownTracker;
+				}
 			else
 				obstacle.kill();
-		}
+				}
 		else{
 			if(player1.inCamera == true){
 				seconds = seconds - 10;
@@ -1230,12 +1226,8 @@ var playState2 = {
 		
 	enemyCollision2: function (player2, obstacle){
 		if(obstacle.body.maxVelocity.x == 800){
-			if(player2.inCamera == true){
-				var coworker_proj = this.coworker.create(obstacle.x, obstacle.y, 'enemy');
-				coworker_proj.body.velocity.x = -800;
-				coworker_proj_angularVelocity = 180;
-				obstacle.kill();
-				create_enem2 = 1;
+			if(cursors.down.isDown && player2.body.touching.down){
+				countdownTracker = countdownTracker;
 			}
 			else
 				obstacle.kill();
@@ -1254,25 +1246,6 @@ var playState2 = {
 		
 	enemyBounce: function(obstacle){
 		obstacle.body.bounce.y = 20;
-	},
-	
-	coworkerCollision: function(player2, coworker){
-		if(coworker.body.velocity.x == 800){
-			seconds = seconds - 10;
-				if(seconds < 9)
-					countdownTracker = seconds;
-			coworker.kill();
-		}
-	},
-	
-	create_worker: function(){
-		seconds = seconds + 300;
-		create_timer.destroy();
-		var coworker_proj = this.coworker.create(this.player2_hitbox.x-500, 350, 'enemy');
-		coworker_proj.scale.setTo(1000,1000);
-		coworker_proj.body.velocity.x = 800;
-		coworker_proj_angularVelocity = 180;
-		create_enem1 = 0;
 	},
 		
 	gameOver: function() {
